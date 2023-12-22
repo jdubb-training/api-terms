@@ -1,16 +1,31 @@
+function parseCSV(csv) {
+    const lines = csv.split("\n");
+    const result = [];
+    const headers = lines[0].split(",");
+
+    for (let i = 1; i < lines.length; i++) {
+        if (lines[i].trim() === "") continue; // Skip empty lines
+        let obj = {};
+        let currentline = lines[i].split(",");
+
+        for (let j = 0; j < headers.length; j++) {
+            obj[headers[j].trim()] = currentline[j].trim();
+        }
+
+        result.push(obj);
+    }
+
+    return result;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     let data = []; // To store the CSV data
 
-    // Fetch the CSV file from your local Git repository
     fetch("api-terms.csv") // Replace with the correct path to your CSV file
         .then((response) => response.text())
         .then((csv) => {
-            // Parse the CSV data
             data = parseCSV(csv);
-
-            // Sort the data by "Category," "Sub-Category," and "Term" columns
             sortByDefault();
-
             initializeTable();
         })
         .catch((error) => {
@@ -43,14 +58,13 @@ document.addEventListener("DOMContentLoaded", function () {
             tableBody.appendChild(tr);
         });
 
-        // Update the page count
         updatePageCount();
     }
 
     function updatePageCount() {
         const totalPages = Math.ceil(data.length / rowsPerPage);
         const paginationControls = document.getElementById("pagination-controls");
-        paginationControls.innerHTML = ''; // Clear existing pagination
+        paginationControls.innerHTML = '';
 
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement('button');
@@ -61,15 +75,61 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             if (i === currentPage) {
-                pageButton.className = 'active'; // Highlight the current page
+                pageButton.className = 'active';
             }
 
             paginationControls.appendChild(pageButton);
         }
     }
 
-    // Add the remaining functions and event listeners here...
+    function sortBy(key) {
+        data.sort((a, b) => a[key].localeCompare(b[key]));
+        currentPage = 1; // Reset to first page after sorting
+        updateTable();
+    }
 
-    // Initialize the page count
+    function sortByDefault() {
+        data.sort((a, b) => {
+            const categoryComparison = a["Category"].localeCompare(b["Category"]);
+            if (categoryComparison !== 0) return categoryComparison;
+
+            const subCategoryComparison = a["Sub-Category"].localeCompare(b["Sub-Category"]);
+            if (subCategoryComparison !== 0) return subCategoryComparison;
+
+            return a["Term"].localeCompare(b["Term"]);
+        });
+        currentPage = 1; // Reset to first page after sorting
+        updateTable();
+    }
+
+    function initializeTable() {
+        updateTable();
+    }
+
+    function searchByTerm() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+
+        if (searchTerm === "") {
+            sortByDefault();
+        } else {
+            data = data.filter((row) =>
+                row["Term"].toLowerCase().includes(searchTerm)
+            );
+            currentPage = 1;
+            updateTable();
+        }
+    }
+
+    searchButton.addEventListener("click", searchByTerm);
+    searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            searchByTerm();
+        }
+    });
+
+    // Expose the sorting functions for the buttons
+    window.sortBy = sortBy;
+    window.sortByDefault = sortByDefault;
+
     updatePageCount();
 });
