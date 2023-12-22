@@ -1,16 +1,16 @@
 function parseCSV(csv) {
     const lines = csv.split("\n");
     const result = [];
-    const headers = lines[0].split(",");
+    const headers = lines[0].split(",").map(header => header.trim());
 
     for (let i = 1; i < lines.length; i++) {
         if (lines[i].trim() === "") continue; // Skip empty lines
-        let obj = {};
-        let currentline = lines[i].split(",");
+        const obj = {};
+        const currentline = lines[i].split(",").map(cell => cell.trim());
 
-        for (let j = 0; j < headers.length; j++) {
-            obj[headers[j].trim()] = currentline[j].trim();
-        }
+        headers.forEach((header, j) => {
+            obj[header] = currentline[j];
+        });
 
         result.push(obj);
     }
@@ -22,13 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let data = []; // To store the CSV data
 
     fetch("api-terms.csv") // Replace with the correct path to your CSV file
-        .then((response) => response.text())
-        .then((csv) => {
+        .then(response => response.text())
+        .then(csv => {
             data = parseCSV(csv);
             sortByDefault();
             initializeTable();
         })
-        .catch((error) => {
+        .catch(error => {
             console.error("Error fetching CSV file:", error);
         });
 
@@ -46,15 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         tableBody.innerHTML = "";
 
-        displayedData.forEach((row) => {
+        displayedData.forEach(row => {
             const tr = document.createElement("tr");
-            for (const header in row) {
-                if (row.hasOwnProperty(header)) {
-                    const td = document.createElement("td");
-                    td.textContent = row[header];
-                    tr.appendChild(td);
-                }
-            }
+            Object.values(row).forEach(text => {
+                const td = document.createElement("td");
+                td.textContent = text;
+                tr.appendChild(td);
+            });
             tableBody.appendChild(tr);
         });
 
@@ -74,10 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateTable();
             });
 
-            if (i === currentPage) {
-                pageButton.className = 'active';
-            }
-
+            pageButton.className = i === currentPage ? 'active' : '';
             paginationControls.appendChild(pageButton);
         }
     }
@@ -112,9 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (searchTerm === "") {
             sortByDefault();
         } else {
-            data = data.filter((row) =>
-                row["Term"].toLowerCase().includes(searchTerm)
-            );
+            data = data.filter(row => row["Term"].toLowerCase().includes(searchTerm));
             currentPage = 1;
             updateTable();
         }
