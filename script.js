@@ -5,18 +5,25 @@ function parseCSV(csv) {
 
     for (let i = 1; i < lines.length; i++) {
         if (lines[i].trim() === "") continue; // Skip empty lines
-        const obj = {};
-        const currentline = lines[i].split(",").map(cell => cell.trim());
+        let obj = {};
+        let row = lines[i], query = /(?!\s*$)\s*(?:"([^"]*)"|([^,]*))\s*(?:,|$)/g, match;
+        
+        let matches = [];
+        while (match = query.exec(row)) {
+            matches.push(match[1] ? match[1] : match[2]);
+        }
 
-        headers.forEach((header, j) => {
-            obj[header] = currentline[j];
-        });
-
-        result.push(obj);
+        if (matches.length === headers.length) {
+            headers.forEach((header, j) => {
+                obj[header] = matches[j];
+            });
+            result.push(obj);
+        }
     }
 
     return result;
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     let data = []; // To store the CSV data

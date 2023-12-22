@@ -15,7 +15,7 @@ OAuth Authorization,Claims Management,Expiration Time (exp),Indicates when the O
 OAuth Authorization,Claims Management,Subject (sub),Identifies the user associated with the OAuth token.
 OAuth Authorization,Claims Management,Audience (aud),Specifies the intended recipient or audience for the OAuth token.
 OAuth Authorization,Scope Definitions,Scopes,Strings in OAuth defining the permissions requested by the client application.
-JWT Authentication,JWT Basics,JSON Web Token (JWT),"A compact, URL-safe way to represent claims transferred between two parties, encoded as a JSON object."
+JWT Authentication,JWT Basics,JSON Web Token (JWT),A compact, URL-safe way to represent claims transferred between two parties, encoded as a JSON object.
 JWT Authentication,Grant Types,JWT Bearer Grant,An OAuth 2.0 grant type allowing a client to exchange a JWT for an access token, used in OAuth-based systems.
 JWT Authentication,JWT Claims,JWT Claims,Information in a JWT providing context and attributes about the token's subject.
 OIDC Authentication,OIDC Scopes,OIDC Scopes,Define the level of access and permissions requested in OIDC-based authentication and authorization.
