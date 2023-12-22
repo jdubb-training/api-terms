@@ -8,12 +8,12 @@
 </head>
 <body>
     <h1>API Terms and Definitions</h1>
-    <button onclick="sortBy('Category')">Sort by Category</button>
-    <button onclick="sortBy('Term')">Sort by Term</button>
-    <div class="search-container">
-	<input type="text" id="search-input" placeholder="Search by Term">
-	<button id="search-button">Search</button>
-    </div>
+	<button onclick="sortByDefault()">Sort by Category</button>
+    <button onclick="sortBy('Term')">Sort by Term </button>
+	<div class="search-container">
+		<input type="text" id="search-input" placeholder="Search by Term">
+		<button id="search-button">Search</button>
+	</div>
     <table>
         <thead>
             <tr>
@@ -33,6 +33,10 @@
         <button id="prev-page">Previous</button>
         <button id="next-page">Next</button>
     </div>
+	<div class="search-container">
+		<input type="text" id="search-input" placeholder="Search by Term">
+		<button id="search-button">Search</button>
+	</div>
     <script src="script.js"></script> <!-- Link to your external JavaScript file -->
 </body>
 </html>

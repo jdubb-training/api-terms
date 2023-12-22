@@ -1,14 +1,8 @@
-// Function to parse CSV data
-function parseCSV(csv) {
-    const lines = csv.split('\n');
-    const data = [];
-
-    for (let i = 0; i < lines.length; i++) {
-        const row = lines[i].split(',');
-        data.push(row);
-    }
-
-    return data;
+// Function to calculate and update the number of pages
+function updatePageCount() {
+    const totalPages = Math.ceil(data.length / rowsPerPage);
+    const paginationControls = document.getElementById("pagination");
+    paginationControls.innerHTML = `Page ${currentPage} of ${totalPages}`;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -31,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     const tableBody = document.getElementById("table-body");
-    const paginationControls = document.getElementById("pagination");
     const searchInput = document.getElementById("search-input");
     const searchButton = document.getElementById("search-button");
 
@@ -47,44 +40,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
         displayedData.forEach((row) => {
             const tr = document.createElement("tr");
-            row.forEach((cellData) => {
-                const td = document.createElement("td");
-                td.textContent = cellData;
-                tr.appendChild(td);
-            });
+            for (const header in row) {
+                if (row.hasOwnProperty(header)) {
+                    const td = document.createElement("td");
+                    td.textContent = row[header];
+                    tr.appendChild(td);
+                }
+            }
             tableBody.appendChild(tr);
         });
+
+        // Update the page count
+        updatePageCount();
     }
 
     function sortBy(key) {
-        data.sort((a, b) => {
-            const indexA = data[0].indexOf(key);
-            const indexB = data[0].indexOf(key);
-            return a[indexA].localeCompare(b[indexB]);
-        });
+        data.sort((a, b) => a[key].localeCompare(b[key]));
         updateTable();
     }
 
     function sortByDefault() {
         // Sort by "Category," "Sub-Category," and "Term" columns
         data.sort((a, b) => {
-            const categoryIndex = data[0].indexOf("Category");
-            const subCategoryIndex = data[0].indexOf("Sub-Category");
-            const termIndex = data[0].indexOf("Term");
-
-            const categoryComparison = a[categoryIndex].localeCompare(b[categoryIndex]);
+            const categoryComparison = a["Category"].localeCompare(b["Category"]);
             if (categoryComparison !== 0) return categoryComparison;
 
-            const subCategoryComparison = a[subCategoryIndex].localeCompare(b[subCategoryIndex]);
+            const subCategoryComparison = a["Sub-Category"].localeCompare(b["Sub-Category"]);
             if (subCategoryComparison !== 0) return subCategoryComparison;
 
-            return a[termIndex].localeCompare(b[termIndex]);
+            return a["Term"].localeCompare(b["Term"]);
         });
     }
 
     function initializeTable() {
         updateTable();
-        paginationControls.style.display = "block";
     }
 
     function searchByTerm() {
@@ -95,11 +84,9 @@ document.addEventListener("DOMContentLoaded", function () {
             sortByDefault();
         } else {
             // Filter the data based on the search term in the "Term" column
-            data = data.filter((row, index) => {
-                if (index === 0) return true; // Include the header row
-                const termIndex = data[0].indexOf("Term");
-                return row[termIndex].toLowerCase().includes(searchTerm);
-            });
+            data = data.filter((row) =>
+                row["Term"].toLowerCase().includes(searchTerm)
+            );
         }
 
         // Reset the current page to 1 and update the table
@@ -131,4 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
             updateTable();
         }
     });
+
+    // Initialize the page count
+    updatePageCount();
 });
