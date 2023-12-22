@@ -1,3 +1,16 @@
+// Function to parse CSV data
+function parseCSV(csv) {
+    const lines = csv.split('\n');
+    const data = [];
+
+    for (let i = 0; i < lines.length; i++) {
+        const row = lines[i].split(',');
+        data.push(row);
+    }
+
+    return data;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     let data = []; // To store the CSV data
 
