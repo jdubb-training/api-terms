@@ -1,20 +1,34 @@
-Term,Definition
-OAuth (Open Authorization),OAuth is an open-standard authorization framework that allows third-party applications to access a user's data or resources without exposing the user's credentials. It is commonly used for secure authentication and authorization in API-based systems.
-Access Token,An access token is a credential used by an application to access protected resources on behalf of a user. In OAuth, it represents the user's authorization to access specific resources.
-Authorization Code Grant,The Authorization Code Grant is an OAuth 2.0 grant type that is commonly used for web applications. It involves a series of steps where the client obtains an authorization code and then exchanges it for an access token.
-Implicit Grant,The Implicit Grant is an OAuth 2.0 grant type designed for client-side applications such as web browsers or mobile apps. It allows the client to obtain an access token directly without an intermediate authorization code.
-Resource Owner,The resource owner is the user who owns and grants access to their protected resources. In OAuth, the resource owner is typically the end-user.
-Client,The client is the application that requests access to protected resources on behalf of the resource owner. It can be a web application, mobile app, or other software.
-Authorization Server,The authorization server is responsible for authenticating the resource owner, granting access tokens, and handling user authorization in OAuth-based interactions.
-Scope,Scope is a parameter in OAuth that specifies the level of access requested by the client. It defines what actions the client can perform with the obtained access token.
-Refresh Token,A refresh token is a credential used to obtain a new access token without requiring the resource owner to reauthenticate. It is used to extend the validity of an access token.
-Scopes,Scopes in OAuth represent permissions or access levels that a client application requests during the authorization process. They define the extent of access the client is requesting.
-Claims,Claims are pieces of information included in OAuth tokens, such as ID tokens and access tokens. They provide context about the user or authorization event.
-Issuer (iss),The issuer (iss) claim in an OAuth token specifies the entity that issued the token, typically the authorization server. It helps verify the token's authenticity.
-Expiration Time (exp),The expiration time (exp) claim in an OAuth token indicates when the token will expire. After this time, the token is considered invalid.
-Subject (sub),The subject (sub) claim in an OAuth token identifies the user associated with the token. It is a unique identifier for the user.
-Audience (aud),The audience (aud) claim in an OAuth token specifies the intended recipient or audience for the token. It indicates which client or application the token is meant for.
-Scope (OAuth),Scopes in OAuth are strings that define the permissions requested by the client application. They determine what actions the client can take on the user's behalf.
-read,The `read` scope may indicate read-only access to certain resources or data.
-write,The `write` scope may indicate write (or modify) access to certain resources.
-admin,In some systems, there might be an `admin` scope that grants administrative privileges or access to sensitive resources.
+Category,Sub-Category,Term,Definition
+OAuth Authentication,Grant Types,OAuth (Open Authorization),OAuth is an open-standard authorization framework allowing third-party applications to access a user's data or resources without exposing the user's credentials. It is commonly used for secure authentication and authorization in API-based systems.
+OAuth Authentication,Grant Types,Authorization Code Grant,An OAuth 2.0 grant type used for web applications. It involves obtaining an authorization code, then exchanging it for an access token.
+OAuth Authentication,Grant Types,Implicit Grant,An OAuth 2.0 grant type for client-side applications like web browsers or mobile apps, allowing direct access token acquisition without an authorization code.
+OAuth Authentication,OAuth Components,Resource Owner,The user who owns and grants access to their protected resources in OAuth.
+OAuth Authentication,OAuth Components,Authorization Server,Responsible for authenticating the resource owner, granting access tokens, and handling user authorization in OAuth-based interactions.
+OAuth Authentication,OIDC (OpenID Connect),OpenID Connect (OIDC),An identity layer on top of OAuth 2.0 for authentication and identity verification, providing user information through ID tokens.
+OAuth Authorization,Access Control,Access Token,A credential for an application to access protected resources on a user's behalf in OAuth, representing user authorization.
+OAuth Authorization,Access Control,Client,The application requesting access to protected resources on behalf of the resource owner.
+OAuth Authorization,Access Control,Scope,A parameter in OAuth specifying the level of access requested by the client, defining allowed actions.
+OAuth Authorization,Token Management,Refresh Token,A credential for obtaining a new access token without reauthenticating the resource owner, extending access token validity.
+OAuth Authorization,Claims Management,Claims,Pieces of information in OAuth tokens providing context about the user or authorization event.
+OAuth Authorization,Claims Management,Issuer (iss),The entity issuing the OAuth token, typically the authorization server.
+OAuth Authorization,Claims Management,Expiration Time (exp),Indicates when the OAuth token will expire.
+OAuth Authorization,Claims Management,Subject (sub),Identifies the user associated with the OAuth token.
+OAuth Authorization,Claims Management,Audience (aud),Specifies the intended recipient or audience for the OAuth token.
+OAuth Authorization,Scope Definitions,Scopes,Strings in OAuth defining the permissions requested by the client application.
+JWT Authentication,JWT Basics,JSON Web Token (JWT),A compact, URL-safe way to represent claims transferred between two parties, encoded as a JSON object.
+JWT Authentication,Grant Types,JWT Bearer Grant,An OAuth 2.0 grant type allowing a client to exchange a JWT for an access token, used in OAuth-based systems.
+JWT Authentication,JWT Claims,JWT Claims,Information in a JWT providing context and attributes about the token's subject.
+JWT Authentication,JWT Claims,Standard Claims,Predefined claims in JWTs with specific meanings, like "iss," "sub," "aud," "exp," and "iat."
+JWT Authentication,JWT Claims,Private Claims,Custom claims defined by the parties involved in the token exchange, specific to the application or system.
+JWT Authentication,JWT Claims,Registered Claims,Predefined claims in JWTs recommended for interoperability, like "iss," "sub," "aud," "exp," and "iat."
+OIDC Authentication,OIDC Scopes,OIDC Scopes,Define the level of access and permissions requested in OIDC-based authentication and authorization.
+OIDC Authentication,OIDC Scopes,openid,A required OIDC scope for basic authentication and identity information, including user identification.
+OIDC Authentication,OIDC Scopes,profile,An OIDC scope allowing the client to request additional user profile information from the identity provider.
+OIDC Authentication,OIDC Scopes,email,An OIDC scope allowing the client to request the user's email address as part of the authentication process.
+RESTful API,Basics,Application Programming Interface (API),A set of rules and protocols for software applications to communicate, defining methods and data formats for information exchange.
+RESTful API,Architecture,Representational State Transfer (REST),An architectural style for designing networked applications, using constraints and principles for scalable and stateless web services.
+RESTful API,Key Concepts,Resource,A key concept in RESTful architecture, identified by URLs and representing data entities like users or products.
+RESTful API,Key Concepts,HTTP Methods,Actions on resources in a RESTful API, including GET, POST, PUT, DELETE, etc.
+RESTful API,Key Concepts,Endpoint,A specific URL or URI representing a resource in a RESTful API.
+RESTful API,Key Concepts,HTTP Request,A client's message to a server in a RESTful API, specifying the desired action and containing data.
+RESTful API,Key Concepts,HTTP Response,A server's reply to a client's request in a RESTful API, including status code and response body.

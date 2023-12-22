@@ -1,104 +1,68 @@
-// JavaScript to fetch and display paginated CSV data
-let data = []; // This will hold the parsed CSV data
-let currentPage = 1;
-const itemsPerPage = 10;
+document.addEventListener("DOMContentLoaded", function () {
+    let data = []; // To store the CSV data
 
-// Function to fetch and parse the CSV data
-function fetchDataAndParse() {
-    fetch('api-terms.csv') // Relative path to the CSV file
-        .then(response => response.text())
-        .then(csvData => {
-            data = parseCSV(csvData); // Parse CSV data into an array of objects
-            displayPage(currentPage);
-            generatePaginationControls();
+    // Fetch the CSV file from your local Git repository
+    fetch("api-terms.csv") // Replace with the correct path to your CSV file
+        .then((response) => response.text())
+        .then((csv) => {
+            // Parse the CSV data
+            data = parseCSV(csv);
+            initializeTable();
+        })
+        .catch((error) => {
+            console.error("Error fetching CSV file:", error);
         });
-}
 
-// Function to parse CSV data into an array of objects
-function parseCSV(csvData) {
-    const lines = csvData.trim().split('\n'); // Split CSV data into lines
-    if (lines.length < 2) {
-        // Ensure there are at least two lines (header and data)
-        return [];
+    const tableBody = document.getElementById("table-body");
+    const paginationControls = document.getElementById("pagination");
+
+    let currentPage = 1;
+    const rowsPerPage = 20;
+
+    function updateTable() {
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const displayedData = data.slice(start, end);
+
+        tableBody.innerHTML = "";
+
+        displayedData.forEach((row) => {
+            const tr = document.createElement("tr");
+            row.forEach((cellData) => {
+                const td = document.createElement("td");
+                td.textContent = cellData;
+                tr.appendChild(td);
+            });
+            tableBody.appendChild(tr);
+        });
     }
 
-    const headers = lines[0].split(',').map(header => header.trim()); // Extract headers
-    const data = [];
-
-    for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',').map(value => value.trim()); // Extract values
-        if (values.length !== headers.length) {
-            // Skip lines with inconsistent data
-            continue;
-        }
-
-        const entry = {};
-        for (let j = 0; j < headers.length; j++) {
-            entry[headers[j]] = values[j]; // Create an object with header-value pairs
-        }
-
-        data.push(entry); // Add the object to the data array
+    function sortBy(key) {
+        data.sort((a, b) => {
+            const indexA = data[0].indexOf(key);
+            const indexB = data[0].indexOf(key);
+            return a[indexA].localeCompare(b[indexB]);
+        });
+        updateTable();
     }
 
-    return data;
-}
+    function initializeTable() {
+        updateTable();
+        paginationControls.style.display = "block";
+    }
 
-// Function to sort data by a specified key (e.g., 'Term' or 'Definition')
-function sortBy(key) {
-    // Sorting logic based on the 'key' (e.g., 'Term' or 'Definition')
-    data.sort((a, b) => {
-        if (a[key] < b[key]) {
-            return -1;
-        } else if (a[key] > b[key]) {
-            return 1;
+    document.getElementById("prev-page").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updateTable();
         }
-        return 0;
     });
 
-    // Call the 'displayPage' function to update the displayed data
-    displayPage(currentPage);
-}
-
-// Function to display a specific page of data
-function displayPage(page) {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = ''; // Clear existing data
-
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const pageData = data.slice(startIndex, endIndex);
-
-    pageData.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.Term}</td>
-            <td>${item.Definition}</td>
-        `;
-        tbody.appendChild(row);
+    document.getElementById("next-page").addEventListener("click", () => {
+        const maxPage = Math.ceil(data.length / rowsPerPage);
+        if (currentPage < maxPage) {
+            currentPage++;
+            updateTable();
+        }
     });
-}
-
-// Function to generate pagination controls
-function generatePaginationControls() {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = ''; // Clear existing pagination controls
-
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-
-    if (totalPages <= 1) {
-        return; // No need for pagination if there's only one page
-    }
-
-    for (let i = 1; i <= totalPages; i++) {
-        const button = document.createElement('button');
-        button.textContent = i;
-        button.addEventListener('click', () => {
-            currentPage = i;
-            displayPage(currentPage);
-        });
-        pagination.appendChild(button);
-    }
-}
-
-// Call the initial fetchDataAndParse function when the page loads
-window.onload = fetchDataAndParse;
+});
