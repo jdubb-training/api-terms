@@ -18,9 +18,6 @@ OAuth Authorization,Scope Definitions,Scopes,Strings in OAuth defining the permi
 JWT Authentication,JWT Basics,JSON Web Token (JWT),A compact, URL-safe way to represent claims transferred between two parties, encoded as a JSON object.
 JWT Authentication,Grant Types,JWT Bearer Grant,An OAuth 2.0 grant type allowing a client to exchange a JWT for an access token, used in OAuth-based systems.
 JWT Authentication,JWT Claims,JWT Claims,Information in a JWT providing context and attributes about the token's subject.
-JWT Authentication,JWT Claims,Standard Claims,Predefined claims in JWTs with specific meanings, like "iss," "sub," "aud," "exp," and "iat."
-JWT Authentication,JWT Claims,Private Claims,Custom claims defined by the parties involved in the token exchange, specific to the application or system.
-JWT Authentication,JWT Claims,Registered Claims,Predefined claims in JWTs recommended for interoperability, like "iss," "sub," "aud," "exp," and "iat."
 OIDC Authentication,OIDC Scopes,OIDC Scopes,Define the level of access and permissions requested in OIDC-based authentication and authorization.
 OIDC Authentication,OIDC Scopes,openid,A required OIDC scope for basic authentication and identity information, including user identification.
 OIDC Authentication,OIDC Scopes,profile,An OIDC scope allowing the client to request additional user profile information from the identity provider.
