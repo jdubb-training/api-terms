@@ -1,10 +1,3 @@
-// Function to calculate and update the number of pages
-function updatePageCount() {
-    const totalPages = Math.ceil(data.length / rowsPerPage);
-    const paginationControls = document.getElementById("pagination");
-    paginationControls.innerHTML = `Page ${currentPage} of ${totalPages}`;
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     let data = []; // To store the CSV data
 
@@ -54,70 +47,28 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePageCount();
     }
 
-    function sortBy(key) {
-        data.sort((a, b) => a[key].localeCompare(b[key]));
-        updateTable();
+    function updatePageCount() {
+        const totalPages = Math.ceil(data.length / rowsPerPage);
+        const paginationControls = document.getElementById("pagination-controls");
+        paginationControls.innerHTML = ''; // Clear existing pagination
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.innerText = i;
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                updateTable();
+            });
+
+            if (i === currentPage) {
+                pageButton.className = 'active'; // Highlight the current page
+            }
+
+            paginationControls.appendChild(pageButton);
+        }
     }
 
-    function sortByDefault() {
-        // Sort by "Category," "Sub-Category," and "Term" columns
-        data.sort((a, b) => {
-            const categoryComparison = a["Category"].localeCompare(b["Category"]);
-            if (categoryComparison !== 0) return categoryComparison;
-
-            const subCategoryComparison = a["Sub-Category"].localeCompare(b["Sub-Category"]);
-            if (subCategoryComparison !== 0) return subCategoryComparison;
-
-            return a["Term"].localeCompare(b["Term"]);
-        });
-    }
-
-    function initializeTable() {
-        updateTable();
-    }
-
-    function searchByTerm() {
-        const searchTerm = searchInput.value.trim().toLowerCase();
-
-        if (searchTerm === "") {
-            // If the search input is empty, reset the table
-            sortByDefault();
-        } else {
-            // Filter the data based on the search term in the "Term" column
-            data = data.filter((row) =>
-                row["Term"].toLowerCase().includes(searchTerm)
-            );
-        }
-
-        // Reset the current page to 1 and update the table
-        currentPage = 1;
-        updateTable();
-    }
-
-    // Event listener for the search button
-    searchButton.addEventListener("click", searchByTerm);
-
-    // Event listener for the Enter key in the search input field
-    searchInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-            searchByTerm();
-        }
-    });
-
-    document.getElementById("prev-page").addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            updateTable();
-        }
-    });
-
-    document.getElementById("next-page").addEventListener("click", () => {
-        const maxPage = Math.ceil(data.length / rowsPerPage);
-        if (currentPage < maxPage) {
-            currentPage++;
-            updateTable();
-        }
-    });
+    // Add the remaining functions and event listeners here...
 
     // Initialize the page count
     updatePageCount();
