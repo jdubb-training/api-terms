@@ -1,29 +1,22 @@
 function parseCSV(csv) {
     const lines = csv.split("\n");
     const result = [];
-    const headers = lines[0].split(",").map(header => header.trim());
+    const headers = lines[0].split("|").map(header => header.trim());
 
     for (let i = 1; i < lines.length; i++) {
         if (lines[i].trim() === "") continue; // Skip empty lines
-        let obj = {};
-        let row = lines[i], query = /(?!\s*$)\s*(?:"([^"]*)"|([^,]*))\s*(?:,|$)/g, match;
-        
-        let matches = [];
-        while (match = query.exec(row)) {
-            matches.push(match[1] ? match[1] : match[2]);
-        }
+        const obj = {};
+        const currentline = lines[i].split(",").map(cell => cell.trim());
 
-        if (matches.length === headers.length) {
-            headers.forEach((header, j) => {
-                obj[header] = matches[j];
-            });
-            result.push(obj);
-        }
+        headers.forEach((header, j) => {
+            obj[header] = currentline[j];
+        });
+
+        result.push(obj);
     }
 
     return result;
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     let data = []; // To store the CSV data
