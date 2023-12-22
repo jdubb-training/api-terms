@@ -5,18 +5,24 @@ function parseCSV(csv) {
 
     for (let i = 1; i < lines.length; i++) {
         if (lines[i].trim() === "") continue; // Skip empty lines
-        const obj = {};
-        const currentline = lines[i].split(",").map(cell => cell.trim());
+        const currentline = lines[i].split("|").map(cell => cell.trim());
 
-        headers.forEach((header, j) => {
-            obj[header] = currentline[j];
-        });
+        if (currentline.length !== headers.length) {
+            console.warn(`Line ${i} has an incorrect number of fields.`);
+            continue; // Skip lines with incorrect number of fields
+        }
+
+        const obj = headers.reduce((accumulator, header, j) => {
+            accumulator[header] = currentline[j];
+            return accumulator;
+        }, {});
 
         result.push(obj);
     }
 
     return result;
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     let data = []; // To store the CSV data
