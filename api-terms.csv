@@ -1,0 +1,20 @@
+Term,Definition
+OAuth (Open Authorization),OAuth is an open-standard authorization framework that allows third-party applications to access a user's data or resources without exposing the user's credentials. It is commonly used for secure authentication and authorization in API-based systems.
+Access Token,An access token is a credential used by an application to access protected resources on behalf of a user. In OAuth, it represents the user's authorization to access specific resources.
+Authorization Code Grant,The Authorization Code Grant is an OAuth 2.0 grant type that is commonly used for web applications. It involves a series of steps where the client obtains an authorization code and then exchanges it for an access token.
+Implicit Grant,The Implicit Grant is an OAuth 2.0 grant type designed for client-side applications such as web browsers or mobile apps. It allows the client to obtain an access token directly without an intermediate authorization code.
+Resource Owner,The resource owner is the user who owns and grants access to their protected resources. In OAuth, the resource owner is typically the end-user.
+Client,The client is the application that requests access to protected resources on behalf of the resource owner. It can be a web application, mobile app, or other software.
+Authorization Server,The authorization server is responsible for authenticating the resource owner, granting access tokens, and handling user authorization in OAuth-based interactions.
+Scope,Scope is a parameter in OAuth that specifies the level of access requested by the client. It defines what actions the client can perform with the obtained access token.
+Refresh Token,A refresh token is a credential used to obtain a new access token without requiring the resource owner to reauthenticate. It is used to extend the validity of an access token.
+Scopes,Scopes in OAuth represent permissions or access levels that a client application requests during the authorization process. They define the extent of access the client is requesting.
+Claims,Claims are pieces of information included in OAuth tokens, such as ID tokens and access tokens. They provide context about the user or authorization event.
+Issuer (iss),The issuer (iss) claim in an OAuth token specifies the entity that issued the token, typically the authorization server. It helps verify the token's authenticity.
+Expiration Time (exp),The expiration time (exp) claim in an OAuth token indicates when the token will expire. After this time, the token is considered invalid.
+Subject (sub),The subject (sub) claim in an OAuth token identifies the user associated with the token. It is a unique identifier for the user.
+Audience (aud),The audience (aud) claim in an OAuth token specifies the intended recipient or audience for the token. It indicates which client or application the token is meant for.
+Scope (OAuth),Scopes in OAuth are strings that define the permissions requested by the client application. They determine what actions the client can take on the user's behalf.
+read,The `read` scope may indicate read-only access to certain resources or data.
+write,The `write` scope may indicate write (or modify) access to certain resources.
+admin,In some systems, there might be an `admin` scope that grants administrative privileges or access to sensitive resources.

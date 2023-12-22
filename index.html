@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Terms and Definitions</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your external CSS file -->
+</head>
+<body>
+    <h1>API Terms and Definitions</h1>
+    <button onclick="sortBy('Term')">Sort by Term</button>
+    <button onclick="sortBy('Definition')">Sort by Definition</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Term</th>
+                <th>Definition</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Data will be inserted here dynamically using JavaScript -->
+        </tbody>
+    </table>
+    <div class="pagination" id="pagination">
+        <!-- Pagination controls will be inserted here dynamically using JavaScript -->
+    </div>
+
+    <script src="script.js"></script> <!-- Link to your external JavaScript file -->
+</body>
+</html>
