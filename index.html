@@ -3,33 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Terms and Definitions</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your external CSS file -->
+    <title>API Glossary</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>API Terms and Definitions</h1>
-    <button onclick="sortByDefault()">Sort by Category</button>
-    <button onclick="sortBy('Term')">Sort by Term</button>
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search by Term">
-        <button id="search-button">Search</button>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Sub-Category</th>
-                <th>Term</th>
-                <th>Definition</th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-            <!-- Data will be inserted here dynamically using JavaScript -->
-        </tbody>
-    </table>
-    <div class="pagination" id="pagination-controls">
-        <!-- Page numbers will be inserted here dynamically using JavaScript -->
-    </div>
-    <script src="script.js"></script> <!-- Link to your external JavaScript file -->
+    <header>
+        <h1>Explore the API Universe</h1>
+        <p>Unlock the Language of APIs</p>
+    </header>
+    <main>
+        <div class="term">
+            <h2>API (Application Programming Interface)</h2>
+            <img src="api-icon.png" alt="API Icon">
+            <p>An API acts as a bridge between different software applications...</p>
+            <button class="expand-button" onclick="expandTerm(this)">Learn More</button>
+            <div class="expanded-content">
+                <!-- Additional information, examples, or visuals can go here -->
+            </div>
+        </div>
+        <!-- Add more terms and definitions with similar formatting -->
+    </main>
+    <footer>
+        <p>Share your thoughts and experiences with us!</p>
+        <div class="user-feedback">
+            <div class="rating">
+                <p>Rate this glossary:</p>
+                <!-- Add star rating icons here -->
+            </div>
+            <textarea placeholder="Leave a comment"></textarea>
+            <button onclick="submitFeedback()">Submit</button>
+        </div>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
+
