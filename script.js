@@ -4,12 +4,12 @@ function parseCSV(csv) {
     const headers = lines[0].split("|").map(header => header.trim());
 
     for (let i = 1; i < lines.length; i++) {
-        if (lines[i].trim() === "") continue; // Skip empty lines
+        if (lines[i].trim() === "") continue;
         const currentline = lines[i].split("|").map(cell => cell.trim());
 
         if (currentline.length !== headers.length) {
             console.warn(`Line ${i} has an incorrect number of fields.`);
-            continue; // Skip lines with incorrect number of fields
+            continue;
         }
 
         const obj = headers.reduce((accumulator, header, j) => {
@@ -23,13 +23,14 @@ function parseCSV(csv) {
     return result;
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
-    let data = []; // To store the CSV data
+    let data = [];
+    let csv = '';
 
-    fetch("api-terms.csv") // Replace with the correct path to your CSV file
+    fetch("api-terms.csv")
         .then(response => response.text())
-        .then(csv => {
+        .then(rawCsv => {
+            csv = rawCsv;
             data = parseCSV(csv);
             sortByDefault();
             initializeTable();
@@ -40,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const tableBody = document.getElementById("table-body");
     const searchInput = document.getElementById("search-input");
-    const searchButton = document.getElementById("search-button");
 
     let currentPage = 1;
     const rowsPerPage = 10;
@@ -54,8 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         displayedData.forEach(row => {
             const tr = document.createElement("tr");
-            Object.values(row).forEach(text => {
+            Object.entries(row).forEach(([key, text]) => {
                 const td = document.createElement("td");
+                td.setAttribute("data-label", key); // For responsive design
                 td.textContent = text;
                 tr.appendChild(td);
             });
@@ -85,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function sortBy(key) {
         data.sort((a, b) => a[key].localeCompare(b[key]));
-        currentPage = 1; // Reset to first page after sorting
+        currentPage = 1;
         updateTable();
     }
 
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             return a["Term"].localeCompare(b["Term"]);
         });
-        currentPage = 1; // Reset to first page after sorting
+        currentPage = 1;
         updateTable();
     }
 
@@ -111,22 +112,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const searchTerm = searchInput.value.trim().toLowerCase();
 
         if (searchTerm === "") {
-            sortByDefault();
+            data = parseCSV(csv);
         } else {
             data = data.filter(row => row["Term"].toLowerCase().includes(searchTerm));
-            currentPage = 1;
-            updateTable();
         }
+        currentPage = 1;
+        updateTable();
     }
 
-    searchButton.addEventListener("click", searchByTerm);
-    searchInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-            searchByTerm();
-        }
-    });
+    searchInput.addEventListener("input", searchByTerm);
 
-    // Expose the sorting functions for the buttons
     window.sortBy = sortBy;
     window.sortByDefault = sortByDefault;
 
