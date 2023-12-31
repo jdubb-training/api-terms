@@ -26,14 +26,16 @@ function parseCSV(csv) {
 document.addEventListener("DOMContentLoaded", function () {
     let data = [];
     let csv = '';
+    let lazyLoadIndex = 0;
+    const lazyLoadStep = 10; // Number of rows to load each time
 
     fetch("api-terms.csv")
         .then(response => response.text())
         .then(rawCsv => {
             csv = rawCsv;
             data = parseCSV(csv);
-            sortByDefault();
-            initializeTable();
+            lazyLoadIndex = lazyLoadStep;
+            updateTable();
         })
         .catch(error => {
             console.error("Error fetching CSV file:", error);
@@ -42,88 +44,78 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById("table-body");
     const searchInput = document.getElementById("search-input");
 
-    let currentPage = 1;
-    const rowsPerPage = 10;
-
     function updateTable() {
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const displayedData = data.slice(start, end);
-
+        const slicedData = data.slice(0, lazyLoadIndex);
         tableBody.innerHTML = "";
 
-        displayedData.forEach(row => {
+        slicedData.forEach((row, rowIndex) => {
             const tr = document.createElement("tr");
+            tr.classList.add("data-row");
+            tr.addEventListener("click", () => toggleRow(rowIndex));
+
             Object.entries(row).forEach(([key, text]) => {
                 const td = document.createElement("td");
-                td.setAttribute("data-label", key); // For responsive design
                 td.textContent = text;
                 tr.appendChild(td);
+
+                // Add tooltip
+                const tooltip = document.createElement("span");
+                tooltip.className = "tooltip-text";
+                tooltip.textContent = text;
+                td.appendChild(tooltip);
             });
+
             tableBody.appendChild(tr);
+
+            // Add collapsible row
+            const detailTr = document.createElement("tr");
+            detailTr.classList.add("detail-row");
+            const detailTd = document.createElement("td");
+            detailTd.setAttribute("colspan", Object.keys(row).length);
+            detailTd.textContent = "Detailed information here"; // Replace with actual details
+            detailTr.appendChild(detailTd);
+            tableBody.appendChild(detailTr);
         });
 
-        updatePageCount();
+        highlightSearchTerms();
     }
 
-    function updatePageCount() {
-        const totalPages = Math.ceil(data.length / rowsPerPage);
-        const paginationControls = document.getElementById("pagination-controls");
-        paginationControls.innerHTML = '';
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.innerText = i;
-            pageButton.addEventListener('click', () => {
-                currentPage = i;
-                updateTable();
-            });
-
-            pageButton.className = i === currentPage ? 'active' : '';
-            paginationControls.appendChild(pageButton);
-        }
+    function toggleRow(index) {
+        const detailRow = tableBody.getElementsByClassName("detail-row")[index];
+        detailRow.style.display = detailRow.style.display === "none" ? "table-row" : "none";
     }
 
-    function sortBy(key) {
-        data.sort((a, b) => a[key].localeCompare(b[key]));
-        currentPage = 1;
-        updateTable();
-    }
-
-    function sortByDefault() {
-        data.sort((a, b) => {
-            const categoryComparison = a["Category"].localeCompare(b["Category"]);
-            if (categoryComparison !== 0) return categoryComparison;
-
-            const subCategoryComparison = a["Sub-Category"].localeCompare(b["Sub-Category"]);
-            if (subCategoryComparison !== 0) return subCategoryComparison;
-
-            return a["Term"].localeCompare(b["Term"]);
-        });
-        currentPage = 1;
-        updateTable();
-    }
-
-    function initializeTable() {
-        updateTable();
-    }
-
-    function searchByTerm() {
+    function highlightSearchTerms() {
         const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm === "") return;
 
-        if (searchTerm === "") {
-            data = parseCSV(csv);
-        } else {
-            data = data.filter(row => row["Term"].toLowerCase().includes(searchTerm));
+        document.querySelectorAll("#table-body td").forEach(td => {
+            if (td.textContent.toLowerCase().includes(searchTerm)) {
+                td.classList.add("highlight");
+            } else {
+                td.classList.remove("highlight");
+            }
+        });
+    }
+
+    searchInput.addEventListener("input", function () {
+        lazyLoadIndex = lazyLoadStep;
+        data = parseCSV(csv);
+        data = data.filter(row => row["Term"].toLowerCase().includes(this.value.trim().toLowerCase()));
+        updateTable();
+    });
+
+    window.onscroll = function() {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            lazyLoadMoreData();
         }
-        currentPage = 1;
+    };
+
+    function lazyLoadMoreData() {
+        if (lazyLoadIndex >= data.length) return;
+        lazyLoadIndex += lazyLoadStep;
         updateTable();
     }
 
-    searchInput.addEventListener("input", searchByTerm);
-
-    window.sortBy = sortBy;
-    window.sortByDefault = sortByDefault;
-
-    updatePageCount();
+    updateTable();
 });
